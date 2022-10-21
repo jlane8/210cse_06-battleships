@@ -1,3 +1,8 @@
+"""
+file: __main__.py
+author: Jerry Lane
+"""
+# import needed modules for game setup
 import globals
 
 from game.casting.actor import Actor
@@ -11,9 +16,14 @@ from game.services.video_service import VideoService
 
 from game.shared.point import Point
 
-
-
+# game loader function
 def main():
+    """
+    parameters: none
+    return: nothing
+    purpose: This function creates and loads the beginning objects
+    needed to run the game.
+    """
     
     # create the cast
     cast = Cast()
@@ -26,7 +36,7 @@ def main():
     banner.set_position(Point(globals.CELL_SIZE, globals.MAX_Y - globals.CELL_SIZE))
     cast.add_actor("banners", banner)
 
-    # create the enemy banner area
+    # second - create the enemy banner area
     banner = Actor()
     banner.set_text("")
     banner.set_font_size(globals.FONT_SIZE)
@@ -34,12 +44,12 @@ def main():
     banner.set_position(Point(globals.MAX_X - (globals.CELL_SIZE * 15), globals.MAX_Y - globals.CELL_SIZE))
     cast.add_actor("banners", banner)
     
-    # create the cursor position
+    # create the cursor position in top half of the screen
     x = int(globals.MAX_X / 2)
     y = int(globals.MAX_Y / 4)
     position = Point(x, y)
 
-    # create the cursor
+    # create the cursor itself
     cursor = Actor()
     cursor.set_text("+")
     cursor.set_font_size(globals.FONT_SIZE)
@@ -47,7 +57,7 @@ def main():
     cursor.set_position(position)
     cast.add_actor("cursors", cursor)
 
-    # creat the divider
+    # create the divider between the enemy field and defense
     y = int(globals.MAX_Y / 2)
     for n in range(0, globals.MAX_X, globals.CELL_SIZE):
         divider = Actor()
@@ -57,7 +67,7 @@ def main():
         divider.set_position(Point(n, y))
         cast.add_actor("dividers", divider)
 
-    # create the enemy fleet in top half of screen, color red (invisible)
+    # create both fleets 
     ships= Fleet(cast)
     enemies = ships.get_ships("enemy_ships")
     defenders = ships.get_ships("defense_ships")
@@ -79,6 +89,6 @@ def main():
     director = Director(keyboard_service, video_service)
     director.start_game(cast)
 
-
+# if this is the main module, run main function, otherwise don't run
 if __name__ == "__main__":
     main()

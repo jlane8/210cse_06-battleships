@@ -1,6 +1,13 @@
+"""
+file: globals.py
+author: Jerry Lane
+purpose: This file holds global values used throughout the program.
+"""
+# import os to make sense of the DATA_PATH and Color for statements below
 import os
 from game.shared.color import Color
 
+# global values
 FRAME_RATE = 12
 MAX_X = 900
 MAX_Y = 615

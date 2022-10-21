@@ -1,3 +1,10 @@
+"""
+file: point.py
+author: authors of rfk
+purpose: This class represents a point in 2d space.
+"""
+
+# class declaration
 class Point:
     """A distance from a relative origin (0, 0).
 
@@ -9,6 +16,7 @@ class Point:
         _y (integer): The vertical distance from the origin.
     """
     
+    # default constructor
     def __init__(self, x, y):
         """Constructs a new Point using the specified x and y values.
         
@@ -19,6 +27,7 @@ class Point:
         self._x = x
         self._y = y
 
+    # method to add two points together
     def add(self, other):
         """Gets a new point that is the sum of this and the given one.
 
@@ -32,6 +41,7 @@ class Point:
         y = self._y + other.get_y()
         return Point(x, y)
 
+    # method to compare two points
     def equals(self, other):
         """Whether or not this Point is equal to the given one.
 
@@ -43,6 +53,7 @@ class Point:
         """
         return self._x == other.get_x() and self._y == other.get_y()
 
+    # method to return the x, or horizontal, component of a point
     def get_x(self):
         """Gets the horizontal distance.
         
@@ -51,6 +62,7 @@ class Point:
         """
         return self._x
 
+    # method to return the y, or vertical, component of a point
     def get_y(self):
         """Gets the vertical distance.
         
@@ -59,6 +71,7 @@ class Point:
         """
         return self._y
 
+    # method to scale a point based on a factor
     def scale(self, factor):
         """
         Scales the point by the provided factor.

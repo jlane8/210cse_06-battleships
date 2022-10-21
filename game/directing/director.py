@@ -1,10 +1,14 @@
+"""
+file: director.py
+author: author of rfk and Jerry Lane
+purpose: This class directs the game action.
+"""
+# import the global values, the Point class, and the Actor class
 import globals
-from game.services.keyboard_service import KeyboardService
 from game.shared.point import Point
-from game.shared.color import Color
-from game.casting.ship import Ship
 from game.casting.actor import Actor
 
+# class declaration
 class Director:
     """A person who directs the game. 
     
@@ -15,6 +19,7 @@ class Director:
         _video_service (VideoService): For providing video output.
     """
 
+    # default constructor
     def __init__(self, keyboard_service, video_service):
         """Constructs a new Director using the specified keyboard and video services.
         
@@ -24,9 +29,6 @@ class Director:
         """
         self._keyboard_service = keyboard_service
         self._video_service = video_service
-        self._ships_set = False
-        self._ship_number = 7
-        self._enter = False
         self._is_game_over = False
         self._enter_key_up = False
         self._enter_key_down = False
@@ -45,7 +47,7 @@ class Director:
         # open game window
         self._video_service.open_window()
 
-        # set cursor in top half of screen to prepare for targeting
+        # align cursor with enemy grid
         cursor = cast.get_first_actor("cursors")
         x = int((globals.MAX_X / 2) / globals.CELL_SIZE) 
         y = int(((globals.MAX_Y - globals.CELL_SIZE) / 4) / globals.CELL_SIZE) 
@@ -90,6 +92,7 @@ class Director:
         # set hit scored bool to false
         self._hit_scored = False
         self._enemy_hit_scored = False
+        self._damaged = False
 
         # get banners from cast for messages
         banner = cast.get_first_actor("banners")
@@ -126,11 +129,15 @@ class Director:
                 banner.set_text("Enemy ship hit!")
                 
                 # enemy fires back
-                self._enemy_hit_scored = ships[0].target()
-                # if self._enemy_hit_scored:
-                #     banner_2.set_text("The enemy scored a hit.")
-                # else:
-                #     banner_2.set_text("The enemy missed.")
+                return_fire = self._enemy_left(cast)
+                pre_volley = self._count_damage(cast)
+                for i in range(return_fire):
+                    self._enemy_hit_scored = ships[i].target()
+                post_volley = self._count_damage(cast)
+                if pre_volley > post_volley:
+                    banner_2.set_text("The enemy damaged our ships.")
+                else:
+                    banner_2.set_text("")
 
                 # set hit scored flag                    
                 self._hit_scored = True
@@ -149,14 +156,18 @@ class Director:
             shot.set_text("X")
             shot.set_color(globals.WHITE)
             cast.add_actor("artillery", shot)
-            # banner.set_text("The shot missed.")
+            banner.set_text("")
             
             # enemy fires back
-            self._enemy_hit_scored = ships[0].target()
-            # if self._enemy_hit_scored:
-            #     banner_2.set_text("The enemy scored a hit.")
-            # else:
-            #     banner_2.set_text("The enemy missed.")
+            return_fire = self._enemy_left(cast)
+            pre_volley = self._count_damage(cast)
+            for i in range(return_fire):
+                self._enemy_hit_scored = ships[i].target()
+            post_volley = self._count_damage(cast)
+            if pre_volley > post_volley:
+                banner_2.set_text("The enemy damaged our ships.")
+            else:
+                banner_2.set_text("")
 
         # check to see if enemy is destroyed
         self._enemy_destroyed = True
@@ -187,6 +198,24 @@ class Director:
         # cursor_position = cursor.get_position()
         # ship = ships[0].get_position()
         # banner.set_text(f"Cursor: {cursor_position.get_x()}, {cursor_position.get_y()} | Ship: {ship.get_x()}, {ship.get_y()}")
+        
+    # method to determine how many enemy ships can return fire
+    def _enemy_left(self, cast):
+        count = 0
+        enemies = cast.get_actors("enemy_ships")
+        for enemy in enemies:
+            if enemy.get_text() != "X":
+                count += 1
+        return count
+    
+    # method to count number of casualties
+    def _count_damage(self, cast):
+        count = 0
+        defenses = cast.get_actors("defense_ships")
+        for defense in defenses:
+            if defense.get_text() == "X":
+                count += 1
+        return count
         
     # method to perform all outputs
     def _do_outputs(self, cast):
