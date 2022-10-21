@@ -41,7 +41,7 @@ def main():
     banner.set_text("")
     banner.set_font_size(globals.FONT_SIZE)
     banner.set_color(globals.RED_BOLD)
-    banner.set_position(Point(globals.MAX_X - (globals.CELL_SIZE * 15), globals.MAX_Y - globals.CELL_SIZE))
+    banner.set_position(Point(globals.MAX_X - (globals.CELL_SIZE * 23), globals.MAX_Y - globals.CELL_SIZE))
     cast.add_actor("banners", banner)
     
     # create the cursor position in top half of the screen
