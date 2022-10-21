@@ -37,7 +37,7 @@ class Director:
         self._enemy_destroyed = False
         self._defender_destroyed = False
 
-        
+    # method holding game loop
     def start_game(self, cast):
         """Starts the game using the given cast. Runs the main game loop.
 
@@ -60,6 +60,7 @@ class Director:
             self._do_outputs(cast)
         self._video_service.close_window()
 
+    # method getting inputs
     def _get_inputs(self, cast):
         """Gets directional input from the keyboard and applies it to the cursor.
         
@@ -83,6 +84,7 @@ class Director:
         if self._keyboard_service.is_enter_key_up():
             self._enter_key_up = True
 
+    # method updating game play
     def _do_updates(self, cast):
         """Updates the cursor's position and resolves any collisions with ships.
         
@@ -122,7 +124,6 @@ class Director:
                 self._enter_key_down = False
                 self._enter_key_up = False 
                 
-
                 # if so, set the color to visible, change the text to an X for destroyed, and let the ship's message go on the banner
                 ship.set_color(globals.RED_BOLD)
                 ship.set_text("X")
@@ -189,18 +190,18 @@ class Director:
                 win_message = "The enemy prevailed. You lose."
             banner.set_text(win_message)
             self._is_game_over = True
-
-
-
-
-
-
-        # cursor_position = cursor.get_position()
-        # ship = ships[0].get_position()
-        # banner.set_text(f"Cursor: {cursor_position.get_x()}, {cursor_position.get_y()} | Ship: {ship.get_x()}, {ship.get_y()}")
-        
+       
     # method to determine how many enemy ships can return fire
     def _enemy_left(self, cast):
+        """Determins how many enemy ships are undamaged and returns
+        that number.
+
+        Args: 
+            cast (Cast): the cast of actors
+
+        Returns:
+            count (int): integer of undamaged enemy ships
+        """
         count = 0
         enemies = cast.get_actors("enemy_ships")
         for enemy in enemies:
@@ -210,6 +211,14 @@ class Director:
     
     # method to count number of casualties
     def _count_damage(self, cast):
+        """Gets the number of undamaged defense ships and returns it.
+
+        Args:
+            cast (Cast): cast of all actors
+
+        Returns:
+            count (int): integer of how many defense ships remain
+        """
         count = 0
         defenses = cast.get_actors("defense_ships")
         for defense in defenses:
@@ -223,6 +232,9 @@ class Director:
         
         Args:
             cast (Cast): The cast of actors.
+
+        Returns:
+            nothing
         """
         self._video_service.clear_buffer()
         actors = cast.get_all_actors()
