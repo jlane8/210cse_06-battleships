@@ -1,19 +1,17 @@
 """
 file: __main__.py
 author: Jerry Lane
+purpose: This file builds the elements of the initial game and then
+sends it to the director instance to start the game.
 """
 # import needed modules for game setup
 import globals
-
 from game.casting.actor import Actor
 from game.casting.cast import Cast
 from game.casting.fleet import Fleet
-
 from game.directing.director import Director
-
 from game.services.keyboard_service import KeyboardService
 from game.services.video_service import VideoService
-
 from game.shared.point import Point
 
 # game loader function
@@ -24,13 +22,12 @@ def main():
     purpose: This function creates and loads the beginning objects
     needed to run the game.
     """
-    
     # create the cast
     cast = Cast()
     
     # create the banners - first the player's message area
     banner = Actor()
-    banner.set_text("")
+    banner.set_text(" ")
     banner.set_font_size(globals.FONT_SIZE)
     banner.set_color(globals.GREEN)
     banner.set_position(Point(globals.CELL_SIZE, globals.MAX_Y - globals.CELL_SIZE))
@@ -38,7 +35,7 @@ def main():
 
     # second - create the enemy banner area
     banner = Actor()
-    banner.set_text("")
+    banner.set_text(" ")
     banner.set_font_size(globals.FONT_SIZE)
     banner.set_color(globals.RED_BOLD)
     banner.set_position(Point(globals.MAX_X - (globals.CELL_SIZE * 23), globals.MAX_Y - globals.CELL_SIZE))
@@ -68,9 +65,9 @@ def main():
         cast.add_actor("dividers", divider)
 
     # create both fleets 
-    ships= Fleet(cast)
-    enemies = ships.get_ships("enemy_ships")
-    defenders = ships.get_ships("defense_ships")
+    ships = Fleet(cast)
+    enemies = ships.get_actors("enemy_ships")
+    defenders = ships.get_actors("defense_ships")
     results = []
     for enemy in enemies:
         results.extend(enemy)
