@@ -153,7 +153,7 @@ class Director:
             shot.set_text("X")
             shot.set_color(globals.WHITE)
             cast.add_actor("artillery", shot)
-            banner.set_text("")
+            banner.set_text(" ")
 
             # enemy returns fire
             self._return_fire(cast)
@@ -207,14 +207,14 @@ class Director:
         
         # conduct enemy return fire
         for i in range(return_fire):
-            self._enemy_hit_scored = ships[i].target()
+            ships[i].target()
         
         # see how many defense ships are left and determine loss
         post_volley = self._count_ships(cast, "defense_ships")
         loss = pre_volley - post_volley
-        ships_left = use_word = ""
         
         # keep words used correct to numbers
+        ship_word = use_word = " "
         if post_volley == 1:
             ship_word = "ship"
         else:
